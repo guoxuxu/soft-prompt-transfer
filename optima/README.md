@@ -1,7 +1,8 @@
 ## OPTIMA: Boosting Prompt Tuning with Domain Adaptation for Few-shot Learning
 
+Very busy recently. Code will come soon within Dec 2022.
 
-Note: This is a work in progress.
+Note: This is a work in progress. 
 
 Data and code for paper: [Improving the Sample Efficiency of Prompt Tuning with Domain Adaptation](https://arxiv.org/abs/2210.02952), Findings of the Association for Computational Linguistics: EMNLP 2022 
 
