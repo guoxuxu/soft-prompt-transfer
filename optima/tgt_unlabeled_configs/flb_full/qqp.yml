@@ -1,0 +1,21 @@
+adv: true
+adv_method: flb
+adv_steps: 2
+num_classes: 2
+reload: false
+seed_list:
+- 111
+- 122
+- 133
+- 144
+- 155
+- 234
+- 345
+- 456
+- 678
+- 789
+src: true
+src_data: mrpc
+src_full: true
+tgt_data: qqp
+tgt_full: true

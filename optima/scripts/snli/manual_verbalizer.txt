@@ -1,0 +1,3 @@
+no
+neutral
+yes

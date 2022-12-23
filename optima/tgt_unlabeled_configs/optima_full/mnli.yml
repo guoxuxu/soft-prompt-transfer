@@ -1,0 +1,25 @@
+ad_ramp: true
+adlr: 0.01
+adv: true
+adv_method: tvatent
+batchsize: 18
+num_classes: 3
+ramp_pert: 1.0
+reload: false
+seed_list:
+- 111
+- 122
+- 133
+- 144
+- 155
+- 234
+- 345
+- 456
+- 678
+- 789
+src: true
+src_data: snli
+src_full: true
+temp_id: 3
+tgt_data: mnli_matched
+tgt_full: true
