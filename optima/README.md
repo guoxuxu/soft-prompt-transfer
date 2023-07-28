@@ -7,6 +7,8 @@ the Association for Computational Linguistics: EMNLP 2022
 
 * [Environment](#environment)
 * [Preliminary Knowledge](#preliminary-knowledge)
+* [Soft Prompts trained by OPTIMA](#soft-prompts-trained-by-optima)
+  * [How to Use](#how-to-use)
 * [Reproduce Experiments](#reproduce-experiments)
   * [The Hybrid Prompt Template](#the-hybrid-prompt-template)
   * [Soft Prompt Initialization](#soft-prompt-initialization)
@@ -17,8 +19,7 @@ the Association for Computational Linguistics: EMNLP 2022
   * [Inference with Pretrained Soft Prompts](#applying-a-pretrained-soft-prompt)
       * [Zero-shot Learning Setting](#zero-shot-learning-setting)
       * [Few-shot Learning Setting](#few-shot-learning-setting)
-* [Soft Prompts trained by OPTIMA](#soft-prompts-trained-by-optima)
-  * [How to Use](#how-to-use)
+
 * [How to Cite](#how-to-cite)
 * [Extra Resources](#extra-resources)
 
@@ -57,6 +58,30 @@ It's better to first create a virtual environment before installing the packages
 * Note: 1) Virtual Adversarial Training is a semi-supervised learning algorithm for single domain data. It cannot be directly applied to unsupervised domain adaptation
   setting as there is a domain gap between labeled data and unlabeled data. 2) Perturbations generated on unlabeled target domain data is unreliable because there're no
   supervisory signals form the target domain.
+
+
+## Soft Prompts trained by OPTIMA
+
+We provide the pretrained soft prompts using OPTIMA under folder ```checkpoints/```
+* soft prompts trained for QQP task： ```qqp_prompt.pt``` 
+* soft prompts trained for MRPC task: ```mrpc_prompt.pt```
+* soft prompts trained for SNLI task: ```snli_prompt.pt```
+* soft prompts trained for MNLI task: ```mnli_prompt.pt```
+* soft prompts trained for SICK task
+  * using MNLI dataset as the source domain: ```mnli/msick_prompt.pt```
+  * using SNLI dataset as the source domain: ```snli/ssick_prompt.pt```
+* soft prompts trained for CB task
+  * using MNLI dataset as the source domain: ```mnli/mcb_prompt.pt```
+  * using SNLI dataset as the source domain: ```snli/scb_prompt.pt```
+
+### How to Use
+load the soft prompt into your embedding table, see more in the ```process_batch``` function at ```layers/soft_template.py:74```
+   * ```pretrained_prompts = torch.load(**.pt)```
+   * ```inputs_embeds = self.raw_embedding(batch['input_ids'])```
+   * ```inputs_embeds = torch.cat([pretrained_prompts, inputs_embeds], 1)```
+   * do remember to extend your attention mask together. 
+
+
 
 ## Reproduce Experiments
 ### The Hybrid Prompt Template
@@ -201,27 +226,6 @@ Without pretraining：
 * Fine-tuning the entire T5 together with a set of prepended soft prompt:
 
   `python train.py --cfg tgt_sup_shot/qqp --tune --src_soft_num 100`
-
-## Soft Prompts trained by OPTIMA
-
-We provide the pretrained soft prompts using OPTIMA under folder ```checkpoints/```
-* soft prompts trained for QQP task： ```qqp_prompt.pt``` 
-* soft prompts trained for MRPC task: ```mrpc_prompt.pt```
-* soft prompts trained for SNLI task: ```snli_prompt.pt```
-* soft prompts trained for MNLI task: ```mnli_prompt.pt```
-* soft prompts trained for SICK task
-  * using MNLI dataset as the source domain: ```mnli/msick_prompt.pt```
-  * using SNLI dataset as the source domain: ```snli/ssick_prompt.pt```
-* soft prompts trained for CB task
-  * using MNLI dataset as the source domain: ```mnli/mcb_prompt.pt```
-  * using SNLI dataset as the source domain: ```snli/scb_prompt.pt```
-
-### How to Use
-load the soft prompt into your embedding table, see more in the ```process_batch``` function at ```layers/soft_template.py:74```
-   * ```pretrained_prompts = torch.load(**.pt)```
-   * ```inputs_embeds = self.raw_embedding(batch['input_ids'])```
-   * ```inputs_embeds = torch.cat([pretrained_prompts, inputs_embeds], 1)```
-   * do remember to extend your attention mask together. 
 
 
 

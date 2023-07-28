@@ -25,7 +25,6 @@ def get_embeds(init_vocab, tokens_from, src_soft_num, tgt_soft_num, tokenizer, r
             tgt_embeds = raw_embedding.weight[torch.tensor(token_index_list[0: tgt_soft_num], dtype=torch.long)].clone()
             assert len(src_embeds) == src_soft_num
             assert len(tgt_embeds) == tgt_soft_num
-            assert len(src_embeds) + len(tgt_embeds) == len(token_index_list)
         else:
             raise NotImplementedError
     else:
@@ -44,7 +43,7 @@ def get_data_handler(plm, WrapperClass, tokenizer, args, seed):
                                                   tokenizer=tokenizer, raw_embedding=raw_embedding)
 
     if args.ppt:
-        ppt_path = f"{args.experiment_dir}/ppt-nsp/pretrain-nsp.pt"
+        ppt_path = f"ppt-nsp/pretrain-nsp.pt"
         assert args.model_name == "t5-xxl-lm-adapt"
         ppt_embeds = torch.load(ppt_path, map_location=torch.device('cpu'))
         src_soft_embeds, tgt_soft_embeds = ppt_embeds.clone(), ppt_embeds.clone()
@@ -93,9 +92,9 @@ def get_data_handler(plm, WrapperClass, tokenizer, args, seed):
                                   decoder_max_length=args.decoder_max_len, teacher_forcing=False, predict_eos_token=False, truncate_method="tail")
 
     if args.tgt_shot:
-        processed_path = os.path.join(args.experiment_dir, "processed_data", f"{args.shot_num}-shot", f"{str(args.shot_num) + '-' + str(seed)}")
+        processed_path = os.path.join("processed_data", f"{args.shot_num}-shot", f"{str(args.shot_num) + '-' + str(seed)}")
     elif args.tgt_full:
-        processed_path = os.path.join(args.experiment_dir, "processed_data", "full")
+        processed_path = os.path.join("processed_data", "full")
     else:
         raise NotImplementedError
     if not os.path.exists(processed_path):
