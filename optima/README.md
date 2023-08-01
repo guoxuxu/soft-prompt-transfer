@@ -155,12 +155,12 @@ adversarial training terms encourages the soft prompts to prefer output distribu
 adversarial perturbations are always point to the directions of gradients that are perpendicular to the decision boundary. See Equations 7-9 in our paper.
 
 ```
-python train.py --cfg free_full/qqp
+python train.py --config free_full/qqp
 ```
 We provide a checkpoint for this approach in folder: ```./checkpoints/adversarial_training/```
 
 ```
-python train.py --cfg vat_full/qqp
+python train.py --config vat_full/qqp
 ```
 We provide a checkpoint for this approach in folder: ```./checkpoints/virtual_adversarial_training/```
 
@@ -180,13 +180,13 @@ Assume that we obtained such perturbations that bridge the domain gap, we train 
 adversarial perturbations are alternately optimized throughout the training epochs. See Algorithm 1 in our paper.
 
 ```
-python train.py --cfg optima_full/qqp
+python train.py --config optima_full/qqp
 ```
 
 For comparison, directly apllying prompt tuning on the source-domain datasets can be done by
 
 ```
-python train.py --cfg src_full/qqp
+python train.py --config src_full/qqp
 ```
 
 ### Inference with Pretrained Soft Prompts
@@ -197,10 +197,8 @@ To apply those pretrained soft prompts on unseen datasets, we first load the pre
 the MRPC dataset on QQP dataset.
 
 ```
-python train.py --optima_full/qqp --best 111 --test
+python train.py --optima_full/qqp --test
 ```
-
-"--best 111" means load the best checkpoint under random seed 111.
 
 #### Few-shot Learning Setting
 
@@ -208,7 +206,7 @@ For few-shot learning setting, we are provided with 8-shot labeled examples for 
 Configurations for other *few-shot learning* data pairs can be found in `/tgt_labeled_configs/tgt_sup_shot/*.yml`
 
 ``` 
-python train.py --cfg tgt_sup_shot/qqp --reload --ckpt optima_full/qqp --seed 111
+python train.py --config tgt_sup_shot/qqp --reload --ckpt optima_full/qqp --load_seed 111
 ```
 
 For comparison, we can evaluate the performance of naive prompt tuning, prompt-based fine-tuning, and full-model tuning without soft prompts as follows:
@@ -217,15 +215,15 @@ Without pretraining：
 
 * The naive Prompt Tuning:
 
-  `python train.py --cfg tgt_sup_shot/qqp`
+  `python train.py --config tgt_sup_shot/qqp`
 
 * Fine-tuning the entire T5 without prepending any soft prompt:
 
-  `python train.py --cfg tgt_sup_shot/qqp --tune --eval`
+  `python train.py --config tgt_sup_shot/qqp --tune --eval`
 
 * Fine-tuning the entire T5 together with a set of prepended soft prompt:
 
-  `python train.py --cfg tgt_sup_shot/qqp --tune --src_soft_num 100`
+  `python train.py --config tgt_sup_shot/qqp --tune --src_soft_num 100`
 
 
 
