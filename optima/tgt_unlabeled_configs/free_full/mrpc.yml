@@ -1,5 +1,5 @@
 adv: true
-adv_method: flb
+adv_method: freeAT
 adv_steps: 2
 num_classes: 2
 reload: false
@@ -9,13 +9,8 @@ seed_list:
 - 133
 - 144
 - 155
-- 234
-- 345
-- 456
-- 678
-- 789
 src: true
-src_data: mr
+src_data: qqp
 src_full: true
-tgt_data: gsst2
+tgt_data: mrpc
 tgt_full: true

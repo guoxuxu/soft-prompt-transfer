@@ -7,11 +7,6 @@ seed_list:
 - 133
 - 144
 - 155
-- 234
-- 345
-- 456
-- 678
-- 789
 src: true
 src_data: qqp
 src_full: true

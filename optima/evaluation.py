@@ -26,7 +26,7 @@ def evaluate(prompt_model, writer, device, args, dataloader, data_set, domain, l
             ground_truths.extend(labels.cpu().tolist())
             predictions.extend(preds.cpu().tolist())
 
-            ebar.set_postfix({'prediction': predictions[0], 'ground_truth': ground_truths[0], 'time': format_time()})
+            ebar.set_postfix({'prediction': predictions[0], 'ground_truth': ground_truths[0]})
             ebar.update(1)
 
             if log:
@@ -35,7 +35,7 @@ def evaluate(prompt_model, writer, device, args, dataloader, data_set, domain, l
                     text = text[0: text.find("</s>")]
                     writer.add_scalar(tag=f"{domain}/{data_set}/{labels[i].item()}: {text}", scalar_value=preds[i], global_step=global_step)
             if args.ad_ramp:
-                domain_disc_loss, domain_disc_acc, disc_logits = prompt_model.domain_discrimination(outputs=outputs, ad_position=args.ad_pos, hidden_aggre=args.h_aggre, loss_ids=inputs["loss_ids"],
+                domain_disc_loss, domain_disc_acc = prompt_model.domain_discrimination(outputs=outputs, loss_ids=inputs["loss_ids"],
                                                                       device=loss.device, domain=domain, ad_weight=1.0)
                 tot_domain_disc_loss += domain_disc_loss.item() * len(labels)
 

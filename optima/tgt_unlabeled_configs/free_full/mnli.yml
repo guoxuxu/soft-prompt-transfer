@@ -1,7 +1,8 @@
 adv: true
-adv_method: flb
+adv_method: freeAT
 adv_steps: 2
-num_classes: 2
+batchsize: 18
+num_classes: 3
 reload: false
 seed_list:
 - 111
@@ -9,13 +10,9 @@ seed_list:
 - 133
 - 144
 - 155
-- 234
-- 345
-- 456
-- 678
-- 789
 src: true
-src_data: mrpc
+src_data: snli
 src_full: true
-tgt_data: qqp
+temp_id: 3
+tgt_data: mnli_matched
 tgt_full: true

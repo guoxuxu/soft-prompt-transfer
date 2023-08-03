@@ -10,6 +10,7 @@ from evaluation import evaluate, predict
 
 from mymodules.free import freeLB
 from mymodules.optima import OPTIMA
+from mymodules.vat import VAT
 
 from openprompt.plms import load_plm
 from openprompt.utils.reproduciblity import set_seed
@@ -33,8 +34,8 @@ model_names = ["model_name", "decoder_max_len", "max_seq_len", "eval", "tune"]
 parser.add_argument("--load_from_local", action="store_false")
 parser.add_argument("--verb_type", type=str, default="manual", help="manual, generation")
 parser.add_argument("--temp_id", type=int, default=0)
-parser.add_argument("--src_soft_num", type=int, default=0)
-parser.add_argument("--tgt_soft_num", type=int, default=0)
+parser.add_argument("--src_soft_num", type=int, default=100)
+parser.add_argument("--tgt_soft_num", type=int, default=100)
 parser.add_argument("--init_vocab", action="store_false")
 parser.add_argument("--tokens_from", type=str, default="firstWords", help="first, firstWords")
 
@@ -44,8 +45,8 @@ prompt_names = ["verb_type", "temp_id", "src_soft_num", "tgt_soft_num", "init_vo
 parser.add_argument("--src_data", type=str, help="mr, snli, mrpc")
 parser.add_argument("--src_full", action="store_true")
 parser.add_argument("--src_shot", action="store_true")
-parser.add_argument("--tgt_data", type=str, help="sst2, mnli_matched, qqp")
-parser.add_argument("--test_data", type=str, help="sst2, mnli_matched, qqp")
+parser.add_argument("--tgt_data", type=str)
+parser.add_argument("--test_data", type=str)
 parser.add_argument("--tgt_full", action="store_true")
 parser.add_argument("--tgt_shot", action="store_true")
 parser.add_argument("--shot_num", type=int, default=8, help="16, 64, 128")
@@ -310,12 +311,6 @@ for seed in seed_list:
         all_tgt_val_f1.append(tgt_val_f1)
 
         tmp = f"\nTgtTestACC:{tgt_val_acc}\t TgtTestF1:{tgt_val_f1}\n{format_time()}\n"
-        if args.init_test:
-            tmp = f"\nTgtInitTestACC:{tgt_val_acc}\t TgtInitTestF1:{tgt_val_f1}\n{format_time()}\n"
-        if args.test_train:
-            tmp = f"\nTestTrainACC:{tgt_val_acc}\t TestTrainF1:{tgt_val_f1}\n{format_time()}\n"
-        if args.test_data != "" and args.test_data != None:
-            tmp = f"\nTest data {args.test_data}\t ACC:{tgt_val_acc}\t F1:{tgt_val_f1}\n{format_time()}\n"
 
         with open(f"{this_run_result_file}", "a") as fout:
             fout.write(tmp)
@@ -459,7 +454,7 @@ for seed in seed_list:
 
             time_start = time.perf_counter()
             # =============================== usual forward ===============================
-            if not args.adv:
+            if not args.adv:  # this is for config of src_full
 
                 if args.src or args.ad:
                     sum_loss = 0.
@@ -478,7 +473,7 @@ for seed in seed_list:
 
                     sum_loss.backward()
 
-                if args.tgt or args.ad:
+                if args.tgt or args.ad:  # this is for config of DANN_FULL
                     sum_loss = 0.
 
                     if args.src and not args.tgt:
@@ -503,9 +498,11 @@ for seed in seed_list:
 
             # =============================== forward with AT ===============================
             else:
-                if args.adv_method == "free":  # ICLR 2020 FreeLB
+                if args.adv_method == "freeAT":  # ICLR 2020 FreeLB
                     freeLB(src_prompt_model, src_inputs, args, writer, glb_step)
-                elif args.adv_method == "optima":  # VAT + DANN
+                elif args.adv_method == "VAT":
+                    VAT(src_prompt_model, src_inputs, args, writer, glb_step)
+                elif args.adv_method == "optima":
                     OPTIMA(src_prompt_model, src_inputs, tgt_inputs, args, writer, glb_step)
                 else:
                     raise NotImplementedError

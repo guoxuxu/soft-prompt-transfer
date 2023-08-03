@@ -1,5 +1,5 @@
 adv: true
-adv_method: flb
+adv_method: freeAT
 adv_steps: 2
 batchsize: 18
 num_classes: 3
@@ -10,11 +10,6 @@ seed_list:
 - 133
 - 144
 - 155
-- 234
-- 345
-- 456
-- 678
-- 789
 src: true
 src_data: mnli_matched
 src_full: true

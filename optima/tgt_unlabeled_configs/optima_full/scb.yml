@@ -1,7 +1,7 @@
 ad_ramp: true
 adlr: 0.01
 adv: true
-adv_method: tvatent
+adv_method: optima
 batchsize: 18
 num_classes: 3
 ramp_pert: 1.0
@@ -12,11 +12,6 @@ seed_list:
 - 133
 - 144
 - 155
-- 234
-- 345
-- 456
-- 678
-- 789
 src: true
 src_data: snli
 src_full: true

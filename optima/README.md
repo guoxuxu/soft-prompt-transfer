@@ -200,6 +200,11 @@ the MRPC dataset on QQP dataset.
 python train.py --optima_full/qqp --test
 ```
 
+print test results across random seeds:
+```
+python train.py --optima_full/qqp --summarize_seeds --print_test
+```
+
 #### Few-shot Learning Setting
 
 For few-shot learning setting, we are provided with 8-shot labeled examples for each dataset. We will first load a pretrained soft prompt checkpoint as warm start.
@@ -208,6 +213,12 @@ Configurations for other *few-shot learning* data pairs can be found in `/tgt_la
 ``` 
 python train.py --config tgt_sup_shot/qqp --reload --ckpt optima_full/qqp --load_seed 111
 ```
+print test results under 16 randomly sampled few-shot training sets for each pretrained checkpoint.
+
+``` 
+python train.py --config tgt_sup_shot/qqp --reload --ckpt optima_full/qqp --load_seed 111 --summarize_seeds --print_test
+```
+
 
 For comparison, we can evaluate the performance of naive prompt tuning, prompt-based fine-tuning, and full-model tuning without soft prompts as follows:
 
