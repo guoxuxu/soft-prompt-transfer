@@ -91,11 +91,8 @@ def VAT(model, src_batch, args, writer, glb_step, self_entropy=False):
 
 
     # ========================= add found delta to src data =========================
-    if args.adv_pos == "X":
-        src_input_batch["inputs_embeds"] = delta + src_embeds_init
-        src_input_batch["attention_mask"] = src_mask
-    else:
-        raise NotImplementedError
+    src_input_batch["inputs_embeds"] = delta + src_embeds_init
+    src_input_batch["attention_mask"] = src_mask
     delta_norm = torch.norm(delta.view(delta.size(0), -1).float(), p=2, dim=1).mean()
     writer.add_scalar(tag="adv/vat_src_delta", scalar_value=delta_norm, global_step=glb_step)
 
