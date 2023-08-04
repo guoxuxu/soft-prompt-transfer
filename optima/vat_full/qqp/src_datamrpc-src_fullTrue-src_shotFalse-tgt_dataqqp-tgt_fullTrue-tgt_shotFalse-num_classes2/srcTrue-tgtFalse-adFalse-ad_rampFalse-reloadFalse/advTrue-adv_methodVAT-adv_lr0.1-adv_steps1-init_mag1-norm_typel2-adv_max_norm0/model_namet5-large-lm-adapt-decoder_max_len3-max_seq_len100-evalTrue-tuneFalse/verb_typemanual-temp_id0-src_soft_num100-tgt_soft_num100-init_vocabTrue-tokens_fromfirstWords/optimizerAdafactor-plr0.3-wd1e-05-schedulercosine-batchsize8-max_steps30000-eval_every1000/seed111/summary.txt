@@ -1,0 +1,7 @@
+==========
+Random Init Performance: glb_step/max_steps:0/30000
+ValACC:34.07, Val F1: 12.38
+==========
+best_glb_step/glb_steps:0/30000
+
+BestValACC:34.07

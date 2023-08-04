@@ -154,17 +154,14 @@ reflect a priori knowledge or belief regarding the PLMs. The priori is that the 
 adversarial training terms encourages the soft prompts to prefer output distributions that are smooth with respect to the input data. Different from random perturbations,
 adversarial perturbations are always point to the directions of gradients that are perpendicular to the decision boundary. See Equations 7-9 in our paper.
 
+adversarial training:
 ```
 python train.py --config free_full/qqp
 ```
-We provide a checkpoint for this approach in folder: ```./checkpoints/adversarial_training/```
-
+virtual adversarial training:
 ```
 python train.py --config vat_full/qqp
 ```
-We provide a checkpoint for this approach in folder: ```./checkpoints/virtual_adversarial_training/```
-
-
 
 ##### 2. How to deal with the domain gap between source and target domains during pretraining?
 
@@ -212,6 +209,10 @@ Configurations for other *few-shot learning* data pairs can be found in `/tgt_la
 
 ``` 
 python train.py --config tgt_sup_shot/qqp --reload --ckpt optima_full/qqp --load_seed 111
+```
+test
+``` 
+python train.py --config tgt_sup_shot/qqp --reload --ckpt optima_full/qqp --load_seed 111 --test
 ```
 print test results under 16 randomly sampled few-shot training sets for each pretrained checkpoint.
 
