@@ -56,12 +56,8 @@ def VAT(model, src_batch, args, writer, glb_step, self_entropy=False):
 
         # ========================= add delta to src data =========================
         delta.requires_grad_()
-
-        if args.adv_pos == "X":
-            src_input_batch["inputs_embeds"] = delta + src_embeds_init
-            src_input_batch["attention_mask"] = src_mask
-        else:
-            raise NotImplementedError
+        src_input_batch["inputs_embeds"] = delta + src_embeds_init
+        src_input_batch["attention_mask"] = src_mask
 
         # ========================= src kl loss =========================
         loss, src_logits, outputs = model.forward_computation(src_input_batch, src_batch["loss_ids"], src_batch["label"])
