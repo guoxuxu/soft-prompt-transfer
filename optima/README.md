@@ -5,13 +5,14 @@ the Association for Computational Linguistics: EMNLP 2022
 
 ## Table of Contents
 
-* [Environment](#environment)
+
 * [Preliminary Knowledge](#preliminary-knowledge)
-* [Soft Prompts trained by OPTIMA](#soft-prompts-trained-by-optima)
+* [Released Checkpoints](#released-checkpoints)
   * [How to Use](#how-to-use)
 * [Reproduce Experiments](#reproduce-experiments)
+  * [Environment](#environment)
+  * [Data Preparation](data-preparation)
   * [The Hybrid Prompt Template](#the-hybrid-prompt-template)
-  * [Soft Prompt Initialization](#soft-prompt-initialization)
   * [Model Configuration](#model-configuration)
   * [Training Soft Prompts with OPTIMA](#pre-training-a-soft-prompt-with-optima)
       * [Construct an Unsupervised Domain Adaptation Setting](#construct-an-unsupervised-domain-adaptation-setting)
@@ -22,14 +23,6 @@ the Association for Computational Linguistics: EMNLP 2022
 
 * [How to Cite](#how-to-cite)
 * [Extra Resources](#extra-resources)
-
-## Environment
-
-It's better to first create a virtual environment before installing the packages.
-
-* Python version: Python 3.8.8
-* Packages used are included in ```requirements.txt```, install them by running ```pip install -r requirements.txt```
-* We used an earlier version of [OpenPrompt](https://github.com/thunlp/OpenPrompt) to set up prompt tuning.
 
 ## Preliminary Knowledge
 
@@ -60,9 +53,8 @@ It's better to first create a virtual environment before installing the packages
   supervisory signals form the target domain.
 
 
-## Soft Prompts trained by OPTIMA
-
-We provide the pretrained soft prompts using OPTIMA under folder ```checkpoints/```
+## Released Checkpoints
+We release the soft prompts pretrained using OPTIMA in folder ```checkpoints/```
 * soft prompts trained for QQP task： ```qqp_prompt.pt``` 
 * soft prompts trained for MRPC task: ```mrpc_prompt.pt```
 * soft prompts trained for SNLI task: ```snli_prompt.pt```
@@ -79,11 +71,28 @@ load the soft prompt into your embedding table, see more in the ```process_batch
    * ```pretrained_prompts = torch.load(**.pt)```
    * ```inputs_embeds = self.raw_embedding(batch['input_ids'])```
    * ```inputs_embeds = torch.cat([pretrained_prompts, inputs_embeds], 1)```
-   * do remember to extend your attention mask together. 
-
-
+   * do remember to extend your attention mask together.
 
 ## Reproduce Experiments
+### Environment
+
+It's better to first create a virtual environment before installing the packages.
+
+* Python version: Python 3.8.8
+* Packages used are included in ```requirements.txt```, install them by running ```pip install -r requirements.txt```
+* We used an earlier version of [OpenPrompt](https://github.com/thunlp/OpenPrompt) to set up prompt tuning.
+
+### Data Preparation
+For pretraining, we use the full labeled dataset for the source domain and unlabeled dataset for the target domain.
+For few-shot learning, we follow [LM-BFF](https://github.com/princeton-nlp/LM-BFF/tree/main/data) to make few-shot data splits. 
+        
+        cd data
+        bash download_data.sh
+        cd ..
+        python generate_k_shot.py
+
+Modify the```data_dir``` argument accordingly.
+
 ### The Hybrid Prompt Template
 
 Studies in this [paper](https://aclanthology.org/2022.acl-long.576.pdf) shows that hybrid prompts, i.e., using both soft and hard prompts, achieves better downstream task
@@ -162,6 +171,7 @@ virtual adversarial training:
 ```
 python train.py --config vat_full/qqp
 ```
+The hyperparameter ```adv_max_norm``` can be used to stablize training by normalizing the magnitude of perturbations. In my experiments, I tried 0.1 and 0.3 but the performance gains are not consistent. 
 
 ##### 2. How to deal with the domain gap between source and target domains during pretraining?
 

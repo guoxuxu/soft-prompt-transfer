@@ -31,7 +31,7 @@ parser.add_argument("--tune", action="store_true")
 model_names = ["model_name", "decoder_max_len", "max_seq_len", "eval", "tune"]
 
 # Prompt
-parser.add_argument("--load_from_local", action="store_false")
+parser.add_argument("--load_from_local", action="store_true")
 parser.add_argument("--verb_type", type=str, default="manual", help="manual, generation")
 parser.add_argument("--temp_id", type=int, default=0)
 parser.add_argument("--src_soft_num", type=int, default=100)
@@ -97,10 +97,10 @@ parser.add_argument("--parallelize", action="store_true", help="if multiple gpus
 parser.add_argument("--seed_list", type=int, nargs="+")
 
 parser.add_argument("--ppt", action="store_true")
-parser.add_argument("--ppt_dir", type=str, default="/home/guoxu/Server110/hdd/PromptTransfer/experiments-Feb16/ppt-nsp/pretrain-nsp.pt")
+parser.add_argument("--ppt_dir", type=str, default="../ppt-nsp/pretrain-nsp.pt")
 parser.add_argument("--results_dir", type=str, default="./")
-parser.add_argument("--data_dir", type=str, default="/home/guoxu/Server110/hdd/LM-BFF/data/")
-parser.add_argument("--plm_path", type=str, default="/home/guoxu/Server110/hdd/pretrained_models/")
+parser.add_argument("--data_dir", type=str, default="./data/")
+parser.add_argument("--plm_path", type=str, default="../pretrained_models/")
 parser.add_argument("--script_path", type=str, default="./scripts/")
 args = parser.parse_args()
 other_names = ["cuda", "cfg", "ckpt", "tgt_unlabeled", "seed", "test", "print_val", "print_test",
@@ -137,7 +137,7 @@ if (args.ckpt != "" or args.ppt) and args.tgt:
     else:
         assert args.ckpt != ""
         src_config, src_data = args.ckpt.split("/")
-        config_path = f"{args.config}/{src_config}_{'_'.join(ext_args)}_seed{args.seed}/{src_data}"
+        config_path = f"{args.config}/{src_config}_{'_'.join(ext_args)}_seed{args.load_seed}/{src_data}"
 else:
     if args.tune:
         args = external_args(args, other_names, skip_list=["tune", "eval"])
